@@ -18,6 +18,59 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+let countries = [];
+
+    countries = fetch(endpoint).then(res => res.json());
+
+    const suggestions = document.querySelector('.suggestions');
+
+const showCountries = (filter) => {
+  
+  
+
+  countries
+  .filter(country => country.city.toLowerCase().includes(filter.toLowerCase()) || country.state.toLowerCase().includes(filter.toLowerCase()))
+  .forEach(country => {
+
+    let li = document.createElement('li');
+
+    
+    const spanCityName = document.createElement('span');
+    spanCityName.classList.add('name')
+    spanCityName.innerText = country.city + ', ';
+
+    const stateName = document.createElement('span');
+    stateName.classList.add('hl')
+    stateName.innerText = country.state;
+
+    spanCityName.appendChild(stateName);
+
+
+
+    const spanPopulation = document.createElement('span');
+    spanPopulation.classList.add('population');
+    spanPopulation.innerText = country.population;
+
+    li.appendChild(spanCityName);
+    li.appendChild(spanPopulation);
+
+    suggestions.appendChild(li);
+    
+  });
+}
+
+
+const searchForm = document.querySelector('.search');
+let inputData = '';
+searchForm.addEventListener('input', event =>{
+  
+  inputData = event.target.value;
+  showCountries(inputData);
+
+
+});
+
+
 </script>
 </body>
 </html>
