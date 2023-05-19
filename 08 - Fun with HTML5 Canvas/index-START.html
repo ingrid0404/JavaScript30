@@ -6,9 +6,84 @@
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
 <body>
-<canvas id="draw" width="800" height="800"></canvas>
+<canvas id="draw" width="800" height="800">
+
+</canvas>
 <script>
+  let isDrawing = false;
+  let coord = { x: 0, y: 0 };
+  //for color
+  let hue = 0;
+  let lineWidth = 10;
+
+  const startFunction = (event) => {
+  isDrawing = true;
+  coord.x = event.offsetX;
+  coord.y = event.offsetY;
+}
+
+const stopFunction = () => {
+  isDrawing = false;
+}
+
+const draw = (event) => {
+  if(!isDrawing) return;
+  //change color
+  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+  ctx.beginPath();
+
+  ctx.moveTo(coord.x, coord.y);
+  ctx.lineTo(event.offsetX, event.offsetY);
+  ctx.stroke();
+
+  coord.x = event.offsetX;
+  coord.y = event.offsetY;
+
+  hue++;
+  if (hue >= 360) {
+    hue = 0;
+  }
+  ctx.lineWidth = lineWidth;
+}
+
+const zoomLineFunction = (event) => {
+  event.preventDefault();
+  console.log("Mouse scroll");
+  console.log(event.deltaY);
+  
+  if(event.deltaY < 0) {
+    if(lineWidth > 10)
+      lineWidth = lineWidth - 5;
+  }
+  else {
+    if(lineWidth < 90)
+      lineWidth = lineWidth + 5;
+  }
+  
+}
+
+
+const canvasElemet = document.getElementById('draw');
+canvasElemet.width = window.innerWidth;
+canvasElemet.height = window.innerHeight;
+
+const ctx = canvasElemet.getContext('2d');
+ctx.strokeStyle = '#BADA55';
+ctx.lineJoin = 'round';
+ctx.lineCap = 'round';
+ctx.lineWidth = lineWidth;
+
+
+canvasElemet.addEventListener('mousedown', startFunction);
+canvasElemet.addEventListener('mouseup', stopFunction);
+canvasElemet.addEventListener('mousemove', draw);
+canvasElemet.addEventListener('wheel', zoomLineFunction);
+
+
+
 </script>
+
+
 
 <style>
   html, body {
